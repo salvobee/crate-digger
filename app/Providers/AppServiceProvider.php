@@ -25,7 +25,11 @@ class AppServiceProvider extends ServiceProvider
         Vite::prefetch(concurrency: 3);
 
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
-            $event->extendSocialite('discogs', \SocialiteProviders\Discogs\Provider::class);
+            $event->extendSocialite(
+                'discogs',
+                \SocialiteProviders\Discogs\Provider::class,
+                \SocialiteProviders\Discogs\Server::class
+            );
         });
 
         Model::unguard();
