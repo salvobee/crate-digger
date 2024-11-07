@@ -1,6 +1,8 @@
 
 # Crate-Digger
 
+[![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2F22553d3f-3aaa-42c1-b032-94d2f2705ccc%3Fdate%3D1%26commit%3D1&style=plastic)](https://forge.laravel.com/servers/857944/sites/2522769)
+
 Crate-Digger is an app for record collectors and crate-digging enthusiasts that allows them to explore, manage, and discover new tracks through integration with external platforms.
 
 ## Project Description
