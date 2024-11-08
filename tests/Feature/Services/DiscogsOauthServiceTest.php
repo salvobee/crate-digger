@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Services;
 
+use App\Models\User;
 use Tests\TestCase;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Contracts\Provider;
@@ -20,7 +21,8 @@ class DiscogsOauthServiceTest extends TestCase
             ->once()
             ->andReturn($providerMock);
 
-        $response = $this->get(route('oauth.create', [ 'provider' => 'discogs' ]));
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('oauth.create', [ 'provider' => 'discogs' ]));
         $response->assertRedirect();
     }
 }
