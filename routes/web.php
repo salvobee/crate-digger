@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
 Route::get('oauth/{provider}/create', [OauthServiceController::class, 'create'])
     ->name('oauth.create');
 Route::post('oauth/{provider}/callback', [OauthServiceController::class, 'store'])
-    ->name('oauth.callback');;
+    ->name('oauth.callback');
+Route::get('oauth/{provider}/callback', [OauthServiceController::class, 'store'])
+    ->name('oauth.callback');
 
 require __DIR__.'/auth.php';
