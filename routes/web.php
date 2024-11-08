@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\OauthServiceController;
+use App\Http\Controllers\DiscogsServiceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -25,14 +25,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('oauth/{provider}/create', [OauthServiceController::class, 'create'])
-    ->name('oauth.create')
+Route::get('oauth/discogs/connect', [DiscogsServiceController::class, 'create'])
+    ->name('discogs.create')
     ->middleware('auth');;
-Route::post('oauth/{provider}/callback', [OauthServiceController::class, 'store'])
-    ->name('oauth.callback')
+Route::post('oauth/discogs/callback', [DiscogsServiceController::class, 'store'])
+    ->name('discogs.store.post')
     ->middleware('auth');
-Route::get('oauth/{provider}/callback', [OauthServiceController::class, 'store'])
-    ->name('oauth.callback')
+Route::get('oauth/discogs/callback', [DiscogsServiceController::class, 'store'])
+    ->name('discogs.store.get')
     ->middleware('auth');;
 
 require __DIR__.'/auth.php';
