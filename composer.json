@@ -12,6 +12,7 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "socialiteproviders/discogs": "^4.1",
+        "spatie/laravel-data": "^4.11",
         "spatie/laravel-schemaless-attributes": "^2.5",
         "tightenco/ziggy": "^2.0"
     },
