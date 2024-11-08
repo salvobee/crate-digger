@@ -24,10 +24,13 @@ class OauthServiceController extends Controller
             abort(404);
 
         $oauth_user_meta = Socialite::driver('discogs')->user();
+        dd($oauth_user_meta);
         $service = Service::create([
             'user_id' => Auth::user()->id,
+            'type' => $provider,
             'meta' => $oauth_user_meta
         ]);
-        dd($service);
+
+        return redirect()->back();
     }
 }
