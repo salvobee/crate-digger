@@ -27,7 +27,6 @@ class DiscogsServiceController extends Controller
         ];
 
         $user->services()->create([
-            'user_id' => $user->id,
             'type' => 'discogs',
             'meta' => $discogs_meta,
         ]);
