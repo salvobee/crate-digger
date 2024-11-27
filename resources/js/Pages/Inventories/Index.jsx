@@ -7,6 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
+import Checkbox from "@/Components/Checkbox.jsx";
 
 export default function Index({ inventories }) {
     const [creatingStore, setCreatingStore] = useState(false);
@@ -189,9 +190,9 @@ export default function Index({ inventories }) {
                     </h2>
 
                     <div className="mt-4">
-                        <InputLabel htmlFor="username" value="Username" />
+                        <InputLabel htmlFor="seller" value="Seller name" />
                         <TextInput
-                            id="username"
+                            id="seller"
                             type="text"
                             value={data.username}
                             onChange={(e) => setData('username', e.target.value)}
@@ -200,6 +201,21 @@ export default function Index({ inventories }) {
                             autoFocus
                         />
                         <InputError message={errors.username} className="mt-2" />
+                    </div>
+
+                    <div className="mt-4">
+                        <label className="flex items-center">
+                            <Checkbox
+                                name="fetch_inventory"
+                                checked={data.fetch_inventory}
+                                onChange={(e) =>
+                                    setData('fetch_inventory', e.target.checked)
+                                }
+                            />
+                            <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
+                            Fetch Inventory
+                        </span>
+                        </label>
                     </div>
 
                     <div className="mt-6 flex justify-end">

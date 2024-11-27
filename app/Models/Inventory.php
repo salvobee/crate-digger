@@ -36,7 +36,7 @@ class Inventory extends Model
             'user_id' => $user->id, // O specifica un altro metodo per il legame utente
             'seller_id' => $sellerData['id'],
             'seller_username' => $sellerData['username'],
-            'html_url' => $sellerData['url'],
+            'html_url' => $sellerData['html_url'],
             'avatar_url' => $sellerData['avatar_url'],
 
             'rating' => $sellerData['stats']['rating'] ?? null,

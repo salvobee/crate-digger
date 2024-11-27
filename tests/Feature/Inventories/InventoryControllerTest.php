@@ -5,7 +5,9 @@ namespace Tests\Feature\Inventories;
 use App\Models\Inventory;
 use App\Models\User;
 use App\Services\DiscogsApiService;
+use Illuminate\Bus\PendingBatch;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -28,6 +30,7 @@ class InventoryControllerTest extends TestCase
 
     public function test_it_creates_inventory()
     {
+        Bus::fake();
         $user = User::factory()->create();
         $discogsApiServiceMock = $this->mock(DiscogsApiService::class);
         $discogsApiServiceMock->shouldReceive('fetchInventoryData')
@@ -56,7 +59,7 @@ class InventoryControllerTest extends TestCase
                                 "total" => 512
                             ],
                             "min_order_total" => 9.0,
-                            "html_url" => "https://www.discogs.com/user/some-username",
+                            "html_url" => "https://www.discogs.com/users/some-username",
                             "uid" => 4991262,
                             "url" => "https://api.discogs.com/users/some-username",
                             "payment" => "PayPal",
@@ -77,7 +80,7 @@ class InventoryControllerTest extends TestCase
             'user_id' => $user->id,
             'seller_username' => 'some-username',
             'seller_id' => "4991262",
-            'html_url' => "https://api.discogs.com/users/some-username",
+            'html_url' => "https://www.discogs.com/users/some-username",
             'avatar_url' => "https://i.discgs.com/some-username.jpeg",
             'rating' => 98.4,
             'stars' => 4.5,
@@ -87,6 +90,58 @@ class InventoryControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('inventories.index'));
+    }
+
+    public function test_it_creates_inventory_and_dispatches_batch()
+    {
+        $user = User::factory()->create();
+
+        // Mock del servizio API
+        $this->mock(DiscogsApiService::class, function ($mock) {
+            $mock->shouldReceive('fetchInventoryData')
+                ->times(2)
+                ->with('some-username')
+                ->andReturn([
+                    'pagination' => ['items' => 5521, 'pages' => 56],
+                    'listings' => [
+                        [
+                            'seller' => [
+                                'id' => 4991262,
+                                'username' => 'some-username',
+                                'avatar_url' => 'https://i.discgs.com/some-username.jpeg',
+                                'stats' => ['rating' => '98.4', 'stars' => 4.5, 'total' => 512],
+                                'html_url' => 'https://www.discogs.com/users/some-username',
+                                'min_order_total' => 9.0,
+                            ],
+                        ],
+                    ],
+                ]);
+        });
+
+        // Mock del batch per asserire il dispatch
+        Bus::fake();
+
+        // Dati di input
+        $inventoryData = ['username' => 'some-username', 'fetch_inventory' => true];
+
+        // Effettua la richiesta
+        $response = $this->actingAs($user)
+            ->post(route('inventories.store'), $inventoryData);
+
+        // Verifica la redirezione
+        $response->assertRedirect(route('inventories.index'));
+
+        // Asserisce che l'inventario è stato creato
+        $this->assertDatabaseHas('inventories', [
+            'seller_id' => 4991262,
+        ]);
+        $inventory = Inventory::whereSellerId(4991262)->first();
+
+        // Asserisce che il batch è stato dispatchato
+        Bus::assertBatched(function (PendingBatch $batch) use ($inventory) {
+            return $batch->name == 'Fetch ' . $inventory->seller_username . ' inventory' &&
+                $batch->jobs->count() === 56;
+        });
     }
 
     public function test_it_deletes_inventory()

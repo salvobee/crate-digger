@@ -23,6 +23,7 @@ class StoreInventoryRequest extends FormRequest
     {
         return [
             'username' => ['required', 'string', 'max:64'],
+            'fetch_inventory' => ['boolean'],
         ];
     }
 }

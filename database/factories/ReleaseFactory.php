@@ -24,6 +24,7 @@ class ReleaseFactory extends Factory
             'discogs_id' => $this->faker->unique()->randomNumber(8),
             'artist' => $this->faker->name(),
             'title' => $this->faker->word(),
+            'year' => $this->faker->year(),
             'label' => $this->faker->company(),
             'catalog_number' => $this->faker->word(),
 
