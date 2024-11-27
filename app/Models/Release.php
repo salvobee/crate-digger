@@ -17,6 +17,12 @@ class Release extends Model
         'videos' => 'array'
     ];
 
+    protected $with = [
+        'formats',
+        'genres',
+        'styles',
+    ];
+
     public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class, 'release_genre', 'release_id', 'genre_id');
