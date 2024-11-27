@@ -17,6 +17,7 @@
         "socialiteproviders/discogs": "^4.1",
         "spatie/laravel-data": "^4.11",
         "spatie/laravel-schemaless-attributes": "^2.5",
+        "symfony/dom-crawler": "^7.1",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
