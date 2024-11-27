@@ -35,4 +35,8 @@ Route::get('oauth/discogs/callback', [DiscogsServiceController::class, 'store'])
     ->name('discogs.store.get')
     ->middleware('auth');;
 
+Route::delete('discogs/delete', [DiscogsServiceController::class, 'destroy'])
+    ->name('discogs.destroy')
+    ->middleware('auth');;
+
 require __DIR__.'/auth.php';

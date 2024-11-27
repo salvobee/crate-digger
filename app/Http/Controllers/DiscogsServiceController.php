@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\DiscogsUserData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 
 class DiscogsServiceController extends Controller
@@ -26,11 +26,20 @@ class DiscogsServiceController extends Controller
             'tokenSecret' => $oauth_user_meta->tokenSecret,
         ];
 
+        $user->services->each->delete();
+
         $user->services()->create([
             'type' => 'discogs',
             'meta' => $discogs_meta,
         ]);
 
         return redirect()->back();
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->user()->services->first()->delete();
+
+        return Redirect::to(route('profile.edit'));
     }
 }

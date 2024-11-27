@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Services;
 
+use App\Models\Service;
 use App\Models\User;
 use Tests\TestCase;
 use Laravel\Socialite\Facades\Socialite;
@@ -37,6 +38,20 @@ class DiscogsOauthServiceTest extends TestCase
             'meta->token' => 'fake_token',
             'meta->tokenSecret' => 'fake_token_secret',
         ]);
+    }
+
+    public function test_it_will_keep_only_one_service_per_user_after_discogs_connect()
+    {
+        $this->mockSocialiteCallback();
+        $user = User::factory()->create();
+        // Creates an existing service for user
+        Service::factory()->for($user)->create();
+
+        $this->actingAs($user)
+            ->post(route('discogs.store.post'))
+            ->assertRedirect();
+
+        $this->assertCount(1, $user->services);
     }
 
     /**
