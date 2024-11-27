@@ -60,4 +60,12 @@ class InventoryController extends Controller
 
         return to_route('inventories.index');
     }
+
+    public function show(Inventory $inventory)
+    {
+        return Inertia::render('Inventories/Show', [
+            'store' => $inventory,
+            'listings' => $inventory->listings()->with('release')->paginate()
+        ]);
+    }
 }

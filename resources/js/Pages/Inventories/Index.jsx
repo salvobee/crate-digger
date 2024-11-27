@@ -81,9 +81,6 @@ export default function Index({ inventories }) {
                             <thead>
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
-                                    Avatar
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                     Name
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
@@ -100,15 +97,17 @@ export default function Index({ inventories }) {
                             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                             {inventories.map((inventory) => (
                                 <tr key={inventory.id}>
-                                    <td className="px-6 py-4">
-                                        <img
-                                            src={inventory.avatar_url}
-                                            alt={`${inventory.seller_username} avatar`}
-                                            className="h-10 w-10 rounded-full"
-                                        />
-                                    </td>
+
                                     <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
-                                        {inventory.seller_username}
+                                        <a className="flex items-center space-x-2" href={route('inventories.show', { inventory: inventory.id})}>
+                                            <img
+                                                src={inventory.avatar_url}
+                                                alt={`${inventory.seller_username} avatar`}
+                                                className="h-10 w-10 rounded-full"
+                                            />
+                                            <span> {inventory.seller_username}</span>
+                                        </a>
+
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
                                         {inventory.rating || 'N/A'}%
