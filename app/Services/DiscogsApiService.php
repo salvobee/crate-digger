@@ -35,6 +35,6 @@ class DiscogsApiService
 
     public function fetchInventoryData(mixed $username, int $pageNumber = 1): array
     {
-        return $this->client->getInventory(['username' => $username, 'page' => $pageNumber])->toArray();
+        return $this->client->getInventory(['username' => $username, 'page' => $pageNumber, 'per_page' => 100])->toArray();
     }
 }
