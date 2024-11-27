@@ -32,4 +32,9 @@ class DiscogsApiService
             'auth' => 'oauth'
         ]);
     }
+
+    public function fetchInventoryData(mixed $username): array
+    {
+        return $this->client->getInventory(['username' => $username])->toArray();
+    }
 }
