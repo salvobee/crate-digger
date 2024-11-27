@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InventoryFetchException;
 use App\Http\Requests\StoreInventoryRequest;
 
 use App\Models\Inventory;
 use App\Services\DiscogsApiService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class InventoryController extends Controller
@@ -26,7 +28,13 @@ class InventoryController extends Controller
     {
         $attributes = $request->validated();
         $inventory_data = $discogsApiService->fetchInventoryData($attributes['username']);
-        Inventory::storeFromDiscogsData($request->user(), $inventory_data);
+        try {
+            Inventory::storeFromDiscogsData($request->user(), $inventory_data);
+        } catch (InventoryFetchException $e) {
+            throw ValidationException::withMessages([
+                'username' => $e->getMessage(),
+            ]);
+        }
 
         return to_route('inventories.index');
     }

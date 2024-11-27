@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\InventoryFetchException;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ class Inventory extends Model
     {
         // Assicurati che i dati contengano almeno una listing
         if (empty($inventoryData['listings'])) {
-            throw new \Exception("No listings available in the provided data.");
+            throw new InventoryFetchException("This user has no active listings");
         }
 
         // Estrarre i dati del venditore dalla prima listing
