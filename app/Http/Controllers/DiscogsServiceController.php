@@ -33,7 +33,7 @@ class DiscogsServiceController extends Controller
             'meta' => $discogs_meta,
         ]);
 
-        return redirect()->back();
+        return redirect()->route('dashboard');
     }
 
     public function destroy(Request $request)

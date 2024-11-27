@@ -28,7 +28,7 @@ class DiscogsOauthServiceTest extends TestCase
 
         $this->actingAs($user)
             ->post(route('discogs.store.post'))
-            ->assertRedirect();
+            ->assertRedirect(route('dashboard'));
 
         $this->assertDatabaseHas('services', [
             'user_id' => $user->id,
