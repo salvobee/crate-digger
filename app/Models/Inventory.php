@@ -13,6 +13,10 @@ class Inventory extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $appends = [
+        'is_fetching'
+    ];
+
     protected $casts = [
         'rating' => 'float',
         'stars' => 'float',
@@ -57,5 +61,12 @@ class Inventory extends Model
     public function listings(): HasMany
     {
         return $this->hasMany(Listing::class);
+    }
+
+    public function getIsFetchingAttribute()
+    {
+        return Analysis::whereResourceId($this->id)
+            ->where('status', 'LIKE' , '%processing%')
+            ->exists();
     }
 }
