@@ -2,13 +2,21 @@
 
 namespace App\Services;
 
+use App\Models\Release;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SortingCriteriaService
 
 {
     const SCHEMA = [
+        [
+            'key' => 'community-rating-desc',
+            'description' => 'Global community rating (9-0)',
+            'field' => 'release.year',
+            'order' => 'desc'
+        ],
         [
             'key' => 'year-asc',
             'description' => 'Year (0-9)',
@@ -128,6 +136,21 @@ class SortingCriteriaService
     {
         if (!array_key_exists('sort', $parameters))
             return $query->orderBy('updated_at', 'DESC');
+
+        if ($parameters['sort'] === 'community-rating-desc') {
+
+            [$field, $order] = SortingCriteriaService::getCriteriaByKey($parameters['sort']);
+            return $query->orderBy(
+                Release::select(
+                    DB::raw('
+                        ((releases.have*1) + (releases.want*2))
+                        *
+                        ((releases.rating_average*2) * releases.rating_count)'
+                    )
+                )->whereColumn("releases.id", "listings.release_id",),
+                $order
+            );
+        }
 
         [$field, $order] = SortingCriteriaService::getCriteriaByKey($parameters['sort']);
 
