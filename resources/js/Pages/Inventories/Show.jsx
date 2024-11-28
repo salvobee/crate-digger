@@ -89,7 +89,10 @@ export default function Show(props) {
                                     <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
 
                                         <div className="max-w-lg text-lg text-nowrap text-ellipsis  overflow-hidden">
-                                            <a target="_blank" title={`${listing.release.artist} - ${listing.release.title}`} href={`https://discogs.com/release/${listing.release.discogs_id}`}>
+                                            <a className="text-lime-600 font-bold"
+                                                target="_blank"
+                                               title={`${listing.release.artist} - ${listing.release.title}`}
+                                               href={`https://discogs.com/release/${listing.release.discogs_id}`}>
                                                 {listing.release.artist} - {listing.release.title}
                                             </a>
                                         </div>
@@ -98,6 +101,44 @@ export default function Show(props) {
                                             <span>/</span>
                                             <LabelBadge label={listing.release.label}
                                                         catalogNumber={listing.release.catalog_number}/>
+                                        </div>
+
+                                        <div className="mt-4 flex space-x-2">
+                                            <div className="flex space-x-1">
+                                                <span className="text-gray-600">Genre:</span>
+                                                {
+                                                    listing.release.genres.length > 0 ?
+                                                        (
+                                                            listing.release.genres.map(
+                                                                genre =>
+                                                                    <span
+                                                                        key={genre.id}
+                                                                        className="flex items-center px-2 rounded-md text-xs bg-black text-white">
+                                                                    {genre.name}
+                                                                </span>
+                                                            )
+                                                        )
+                                                        : <span className="text-gray-200">N/A</span>
+                                                }
+                                            </div>
+
+                                            <div className="flex space-x-1">
+                                                <span className="text-gray-600">Style:</span>
+                                                {
+                                                    listing.release.genres.length > 0 ?
+                                                        (
+                                                            listing.release.styles.map(
+                                                                style =>
+                                                                    <span
+                                                                        key={style.id}
+                                                                        className="flex items-center px-2 rounded-md text-xs bg-gray-500 text-white">
+                                                                    {style.name}
+                                                                </span>
+                                                            )
+                                                        )
+                                                        : <span className="text-gray-200">N/A</span>
+                                                }
+                                            </div>
                                         </div>
                                     </td>
 
@@ -115,7 +156,7 @@ export default function Show(props) {
                                             </div>
 
                                             <div className="flex items-center space-x-2">
-                                            <FaRegSquare  />
+                                                <FaRegSquare/>
                                                 <ConditionBadge condition={listing.sleeve_condition}/>
                                             </div>
                                         </div>
@@ -129,7 +170,7 @@ export default function Show(props) {
                         </table>
 
                         <div className="mt-4 flex items-center justify-center mx-auto">
-                             <Pagination links={listings.links} />
+                            <Pagination links={listings.links}/>
                         </div>
                     </div>
                 </div>
