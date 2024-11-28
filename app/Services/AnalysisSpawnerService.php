@@ -25,9 +25,6 @@ class AnalysisSpawnerService
             case AnalysisType::FETCH_INVENTORY->value:
                 $this->spawnFetchInventoryJobs();
                 break;
-            case AnalysisType::ANALYZE_INVENTORY->value:
-                $this->spawnAnalyzeInventoryJobs();
-                break;
             default:
                 break;
         };
@@ -53,7 +50,6 @@ class AnalysisSpawnerService
         $batch = Bus::batch($jobs)
             ->before(function (Batch $batch) {
                 // The batch has been created but no jobs have been added...
-                Analysis::query()->whereBatchId($batch->id)->first()->start();
             })->progress(function (Batch $batch) {
                 Analysis::query()->whereBatchId($batch->id)->first()->progress();
             })->then(function (Batch $batch) {
@@ -63,16 +59,11 @@ class AnalysisSpawnerService
                 // First batch job failure detected...
                 Analysis::query()->whereBatchId($batch->id)->first()->fail();
             })->finally(function (Batch $batch) {
-                // The batch has finished executing...
+                // Batch is complete
                 Analysis::query()->whereBatchId($batch->id)->first()->complete();
             })->name('Fetch ' . $inventory->seller_username . ' inventory')
             ->dispatch();
 
         $this->analysis->update(['batch_id' => $batch->id]);
-    }
-
-    private function spawnAnalyzeInventoryJobs()
-    {
-
     }
 }
