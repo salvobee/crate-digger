@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Analysis;
 use App\Models\Inventory;
 use App\Models\Listing;
 use App\Models\Release;
@@ -73,6 +74,10 @@ class FetchInventoryPageJob implements ShouldQueue
                         'ships_from' => $listing_data['ships_from'],
                         'allow_offers' => $listing_data['allow_offers'],
                     ]);
+                $this->batch()->add(new UpdateReleaseDataJob($release));
+                $analysis = Analysis::whereBatchId($this->batch()->id)->first();
+                $analysis->jobs++;
+                $analysis->save();
             });
             DB::commit();
         } catch (\Exception $e)
