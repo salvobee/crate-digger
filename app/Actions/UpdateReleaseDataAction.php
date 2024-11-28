@@ -23,9 +23,11 @@ class UpdateReleaseDataAction
         $release->country = $release_data['country'];
         $release->rating_average = $release_data['community']['rating']['average'];
         $release->rating_count = $release_data['community']['rating']['count'];
-        $release->master_id = $release_data['master_id'];
         $release->num_for_sale = $release_data['num_for_sale'];
         $release->lowest_price = $release_data['lowest_price'];
+
+        if (array_key_exists("master_id", $release_data))
+            $release->master_id = $release_data['master_id'];
 
         $release->videos = collect($release_data['videos'])->map(fn ($video_data) => $video_data['uri'])->values()->toArray();
 
