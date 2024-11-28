@@ -12,6 +12,10 @@ class Listing extends Model
     /** @use HasFactory<\Database\Factories\ListingFactory> */
     use HasFactory, HasUuids;
 
+    protected $with = [
+        'release'
+    ];
+
     public function inventory(): BelongsTo
     {
         return $this->belongsTo(Inventory::class);

@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Enums\AnalysisType;
 use App\Exceptions\InventoryFetchException;
 use App\Http\Requests\StoreInventoryRequest;
-
-use App\Jobs\FetchInventoryPageJob;
 use App\Models\Analysis;
 use App\Models\Inventory;
 use App\Services\DiscogsApiService;
+use App\Services\SortingCriteriaService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
@@ -61,11 +59,26 @@ class InventoryController extends Controller
         return to_route('inventories.index');
     }
 
-    public function show(Inventory $inventory)
+    public function show(Request $request, Inventory $inventory)
     {
-        return Inertia::render('Inventories/Show', [
-            'store' => $inventory,
-            'listings' => $inventory->listings()->with('release')->paginate()
+        $parameters = $request->validate([
+            'sort' => [ Rule::in(SortingCriteriaService::sortingCriteriaKeys())],
         ]);
+
+        $listing_query = SortingCriteriaService::prepareSortingCriteria(
+            $inventory->listings()->with('release')->getQuery(),
+            $parameters
+        );
+
+        $props = [
+            'criteria' => SortingCriteriaService::SCHEMA,
+            'store' => $inventory,
+            'listings' => $listing_query
+                ->paginate()
+                ->appends($request->query())
+        ];
+
+        return Inertia::render('Inventories/Show', $props);
     }
+
 }
