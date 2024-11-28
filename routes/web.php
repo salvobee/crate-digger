@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DiscogsServiceController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -38,5 +39,7 @@ Route::get('oauth/discogs/callback', [DiscogsServiceController::class, 'store'])
 Route::delete('discogs/delete', [DiscogsServiceController::class, 'destroy'])
     ->name('discogs.destroy')
     ->middleware('auth');;
+
+    Route::resource('inventories', InventoryController::class);
 
 require __DIR__.'/auth.php';
