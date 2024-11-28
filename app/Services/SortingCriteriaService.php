@@ -59,6 +59,43 @@ class SortingCriteriaService
         ],
 
         [
+            'key' => 'on-sale-asc',
+            'description' => 'Num for Sales (0-9)',
+            'field' => 'release.num_for_sale:',
+            'order' => 'asc'
+        ],
+        [
+            'key' => 'on-sale-desc',
+            'description' => 'Num for Sales (9-0)',
+            'field' => 'release.num_for_sale:',
+            'order' => 'desc'
+        ],
+
+        [
+            'key' => 'rating-count-asc',
+            'description' => 'Rating Count (0-9)',
+            'field' => 'release.rating_count',
+            'order' => 'asc'
+        ],
+        [
+            'key' => 'rating-count-desc',
+            'description' => 'Rating Count (9-0)',
+            'field' => 'release.rating_count',
+            'order' => 'desc'
+        ],
+        [
+            'key' => 'rating-average-asc',
+            'description' => 'Rating Average (0-9)',
+            'field' => 'release.rating_average',
+            'order' => 'asc'
+        ],
+        [
+            'key' => 'rating-average-desc',
+            'description' => 'Rating Average (9-0)',
+            'field' => 'release.rating_average',
+            'order' => 'desc'
+        ],
+        [
             'key' => 'price-asc',
             'description' => 'Price (0-9)',
             'field' => 'price_value',
@@ -90,7 +127,7 @@ class SortingCriteriaService
     public static function prepareSortingCriteria(Builder $query, array $parameters): Builder
     {
         if (!array_key_exists('sort', $parameters))
-            return $query->orderBy('created_at', 'DESC');
+            return $query->orderBy('updated_at', 'DESC');
 
         [$field, $order] = SortingCriteriaService::getCriteriaByKey($parameters['sort']);
 
