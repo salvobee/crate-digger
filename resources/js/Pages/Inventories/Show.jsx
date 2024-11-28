@@ -66,9 +66,12 @@ export default function Show(props) {
                             <div className="flex items-center space-x-2">
                                 <span>Sort by</span>
                                 <form>
-                                    <select name="sort"  onChange={handleSortChange} defaultValue={new URLSearchParams(window.location.search).get('sort') || ''}>
+                                    <select name="sort" onChange={handleSortChange}
+                                            defaultValue={new URLSearchParams(window.location.search).get('sort') || ''}>
+                                        <option  value="">Default (last modified)</option>
                                         {criteria.map(criteria => (
-                                            <option key={criteria.key} value={criteria.key}>{criteria.description}</option>
+                                            <option key={criteria.key}
+                                                    value={criteria.key}>{criteria.description}</option>
                                         ))}
                                     </select>
                                 </form>
