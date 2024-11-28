@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bf3589128b1990d704f47a913c039cd",
+    "content-hash": "8025ed3fce3a55779d80a4a8c9bbf3a1",
     "packages": [
         {
             "name": "amphp/amp",
@@ -3650,6 +3650,69 @@
                 }
             ],
             "time": "2024-03-23T07:42:40+00:00"
+        },
+        {
+            "name": "mgussekloo/laravel-facet-filter",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mgussekloo/laravel-facet-filter.git",
+                "reference": "c5dedc5f14aa734a2166ee2cce176c051774cc57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mgussekloo/laravel-facet-filter/zipball/c5dedc5f14aa734a2166ee2cce176c051774cc57",
+                "reference": "c5dedc5f14aa734a2166ee2cce176c051774cc57",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.9.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.6",
+                "nunomaduro/larastan": "^2.0",
+                "orchestra/testbench": "^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mgussekloo\\FacetFilter\\FacetFilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mgussekloo\\FacetFilter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Martijn Gussekloo",
+                    "email": "1426964+mgussekloo@users.noreply.github.com"
+                }
+            ],
+            "description": "Simple facet filtering in Laravel projects, hassle free.",
+            "keywords": [
+                "facet",
+                "faceted search",
+                "filter",
+                "laravel",
+                "navigation",
+                "search",
+                "smart filter"
+            ],
+            "support": {
+                "issues": "https://github.com/mgussekloo/laravel-facet-filter/issues",
+                "source": "https://github.com/mgussekloo/laravel-facet-filter/tree/master"
+            },
+            "time": "2024-10-05T07:45:39+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -10791,7 +10854,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mgussekloo/laravel-facet-filter": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -7,12 +7,15 @@ use App\Exceptions\InventoryFetchException;
 use App\Http\Requests\StoreInventoryRequest;
 use App\Models\Analysis;
 use App\Models\Inventory;
+use App\Models\Listing;
 use App\Services\DiscogsApiService;
+use App\Services\ListingFilterService;
 use App\Services\SortingCriteriaService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use Mgussekloo\FacetFilter\Models\Facet;
 
 class InventoryController extends Controller
 {
@@ -63,16 +66,42 @@ class InventoryController extends Controller
     {
         $parameters = $request->validate([
             'sort' => [ Rule::in(SortingCriteriaService::sortingCriteriaKeys())],
+            'filters' => [
+//                Rule::array(
+//                    collect(Listing::facetDefinitions())
+//                        ->pluck('fieldname')
+//                        ->toArray()
+//                )
+            ]
         ]);
 
+
+        $query = $inventory->listings()->with('release')->getQuery();
+
+        if (array_key_exists('filters', $parameters))
+            ListingFilterService::buildFilterQuery($query, $parameters['filters']);
+
+
         $listing_query = SortingCriteriaService::prepareSortingCriteria(
-            $inventory->listings()->with('release')->getQuery(),
+            $query,
             $parameters
-        );
+       );
+
+
+
+        $facets = collect(Listing::getFacets())
+            ->map(function (Facet $facet)  {
+                $facet_array = $facet->toArray();
+                $facet_array['options'] = $facet->getOptions();
+                return $facet_array;
+            });
+
 
         $props = [
             'criteria' => SortingCriteriaService::SCHEMA,
             'store' => $inventory,
+            'facets' => $facets,
+            'parameters' => $parameters,
             'listings' => $listing_query
                 ->paginate()
                 ->appends($request->query())
