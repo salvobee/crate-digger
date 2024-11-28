@@ -88,7 +88,6 @@ class InventoryController extends Controller
        );
 
 
-
         $facets = collect(Listing::getFacets())
             ->map(function (Facet $facet)  {
                 $facet_array = $facet->toArray();
@@ -96,6 +95,11 @@ class InventoryController extends Controller
                 return $facet_array;
             });
 
+        if (!array_key_exists('sort', $parameters))
+            $parameters['sort'] = 'default';
+
+        if (!array_key_exists('filters', $parameters))
+            $parameters['filters'] = [];
 
         $props = [
             'criteria' => SortingCriteriaService::SCHEMA,
@@ -103,7 +107,7 @@ class InventoryController extends Controller
             'facets' => $facets,
             'parameters' => $parameters,
             'listings' => $listing_query
-                ->paginate()
+                ->paginate(100)
                 ->appends($request->query())
         ];
 

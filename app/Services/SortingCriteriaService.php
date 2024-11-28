@@ -12,6 +12,12 @@ class SortingCriteriaService
 {
     const SCHEMA = [
         [
+            'key' => 'default',
+            'description' => 'Default (added desc)',
+            'field' => 'created_at',
+            'order' => 'desc'
+        ],
+        [
             'key' => 'community-rating-desc',
             'description' => 'Global community rating (9-0)',
             'field' => 'release.year',
