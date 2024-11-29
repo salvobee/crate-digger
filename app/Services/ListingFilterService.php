@@ -2,26 +2,97 @@
 
 namespace App\Services;
 
+use App\Models\Listing;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Mgussekloo\FacetFilter\Models\Facet;
 
 class ListingFilterService
 {
+    const OTHER_FILTERS = [
+        [
+            'is_facet' => false,
+            'title' => 'Year Range (from)',
+            'fields' => [
+                'year_from',
+                'year_to'
+            ],
+            'type' => 'range'
+        ]
+    ];
+
+    static function getFacetsDefinitions(): Collection
+    {
+        return collect(Listing::getFacets())
+            ->map(function (Facet $facet)  {
+                $facet_array = $facet->toArray();
+                $facet_array['options'] = $facet->getOptions();
+                return $facet_array;
+            });
+    }
+
+
+    static function getOtherFiltersDefinitions(): Collection
+    {
+        return collect(self::OTHER_FILTERS);
+    }
+
+    static function getValidFieldsList(): array
+    {
+        $facets = self::getFacetsDefinitions()
+            ->pluck('fieldname');
+
+        $other = collect(self::OTHER_FILTERS)
+            ->pluck('fields')
+            ->flatten()
+            ->values();
+
+        return $facets->merge($other)->toArray();
+    }
+
     static function buildFilterQuery($query, $filters)
     {
         $filter_query = $query;
         foreach ($filters as $field => $values)
         {
-            $fields_split = explode('.', $field);
+            $special_filter_lookup = self::getDefinitionFromFieldName($field);
 
-            $filter_query =  match (count($fields_split)) {
-                1 => self::buildSimpleFilterQuery($query, $field, $values),
-                2 => self::buildNestedFilterQuery($query, $fields_split, $values),
-                3 => self::buildDoubleNestedFilterQuery($query, $fields_split, $values),
-                default => $query
-            };
+            // If is a special filter, we use another strategy pattern
+            if ($special_filter_lookup) {
+                $filter_query = self::buildSpecialFilter($query, $field, $values);
+            } else {
+                $fields_split = explode('.', $field);
+
+                $filter_query = match (count($fields_split)) {
+                    1 => self::buildSimpleFilterQuery($query, $field, $values),
+                    2 => self::buildNestedFilterQuery($query, $fields_split, $values),
+                    3 => self::buildDoubleNestedFilterQuery($query, $fields_split, $values),
+                    default => $query
+                };
+            }
         }
 
         return $filter_query;
+    }
+
+    static function getDefinitionFromFieldName(string $fieldName)
+    {
+        return self::getOtherFiltersDefinitions()
+            ->filter(fn (array $definition) => collect($definition['fields'])->contains($fieldName))
+            ->first();
+    }
+
+
+    private static function buildSpecialFilter($query, string $field, mixed $value): Builder
+    {
+        return match ($field) {
+            'year_from' => $query->whereHas('release',
+                fn (Builder $query) => $query->where('year', '>=', $value)
+            ),
+            'year_to' => $query->whereHas('release',
+                fn (Builder $query) => $query->where('year', '<=', $value)
+            ),
+        };
     }
 
     private static function buildSimpleFilterQuery(Builder $query, string $field, mixed $values): Builder
