@@ -49,7 +49,8 @@ class Listing extends Model
     }
 
     protected $with = [
-        'release'
+        'release',
+        'inventory'
     ];
 
     public function inventory(): BelongsTo
