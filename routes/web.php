@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CrateController;
 use App\Http\Controllers\DiscogsServiceController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
@@ -40,6 +41,9 @@ Route::delete('discogs/delete', [DiscogsServiceController::class, 'destroy'])
     ->name('discogs.destroy')
     ->middleware('auth');;
 
-    Route::resource('inventories', InventoryController::class);
+Route::resource('inventories', InventoryController::class);
+
+Route::resource('crates', CrateController::class)
+    ->only(['index','store', 'destroy']);
 
 require __DIR__.'/auth.php';

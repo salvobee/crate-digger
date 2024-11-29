@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Inventory::class);
     }
+
+    public function crates(): HasMany
+    {
+        return $this->hasMany(Crate::class);
+    }
 }
