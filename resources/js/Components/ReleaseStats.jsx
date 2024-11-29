@@ -1,6 +1,6 @@
 import StarRating from "@/Components/StarRating.jsx";
 
-export default function ReleaseStats({release}) {
+export default function ReleaseStats({release, layout = 'col'}) {
 
     const {want, have} = release
 
@@ -19,7 +19,7 @@ export default function ReleaseStats({release}) {
     }
 
     return (
-        <div className="flex flex-col space-y-1">
+        <div className={`flex ${layout === 'col' ? 'flex-col space-y-1' : 'flex-row space-x-4'} `}>
             {/* Wants */}
             <div className="flex items-center space-x-2">
                 <span
