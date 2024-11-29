@@ -35,8 +35,18 @@ class UpdateReleaseDataActionTest extends TestCase
             'num_for_sale' => 13,
             'lowest_price' => 1.54,
             'videos' => [
-                ['uri' => 'https://www.youtube.com/watch?v=MKk-a7qamdk'],
-                ['uri' => 'https://www.youtube.com/watch?v=YVlG6GIMBTY'],
+                [
+                    'title' => 'Title',
+                    'description' => 'description',
+                    'uri' => 'https://www.youtube.com/watch?v=MKk-a7qamdk',
+                    'embed' => true,
+                ],
+                [
+                    'title' => 'Title',
+                    'description' => 'description',
+                    'uri' => 'https://www.youtube.com/watch?v=YVlG6GIMBTY',
+                    'embed' => true,
+                ],
             ],
             'genres' => ['Electronic'],
             'styles' => ['Euro House'],
@@ -71,10 +81,18 @@ class UpdateReleaseDataActionTest extends TestCase
             'lowest_price' => 1.54,
         ]);
 
-        $this->assertEquals([
-            'https://www.youtube.com/watch?v=MKk-a7qamdk',
-            'https://www.youtube.com/watch?v=YVlG6GIMBTY',
-        ], $release->fresh()->videos);
+        $this->assertEquals([[
+            'title' => 'Title',
+            'description' => 'description',
+            'uri' => 'https://www.youtube.com/watch?v=MKk-a7qamdk',
+            'embed' => true,
+        ],
+            [
+                'title' => 'Title',
+                'description' => 'description',
+                'uri' => 'https://www.youtube.com/watch?v=YVlG6GIMBTY',
+                'embed' => true,
+            ]], $release->fresh()->videos);
 
         $this->assertCount(1, Genre::all());
         $this->assertDatabaseHas('genres', ['name' => 'Electronic']);
