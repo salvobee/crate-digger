@@ -107,13 +107,13 @@ class AnalysisSpawnerServiceTest extends TestCase
         // Assert che i job FetchInventoryPageJob siano stati divisi correttamente
         Bus::assertBatched(function (PendingBatch $batch) use ($inventory) {
             return $batch->name == ('Fetch ' . $inventory->seller_username . ' inventory') &&
-                $batch->jobs->count() === 150;
+                $batch->jobs->count() === 200;
         });
 
         // Verifica che l'analisi abbia aggiornato correttamente il numero di job
         $this->assertDatabaseHas('analyses', [
             'id' => $analysis->id,
-            'jobs' => 150, // 150 pagine totali distribuite tra ASC e DESC
+            'jobs' => 200,
         ]);
 
         // Verifica che l'inventario abbia aggiornato il conteggio totale degli articoli

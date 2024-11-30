@@ -57,29 +57,17 @@ class AnalysisSpawnerService
                 ->toArray();
         } else {
 
-//            $half_listing_count = $listings_count / 2;
-            // Listing count is less or equal 20k (20k / 2 = 10k)
-            if ($listings_count <= 20000) {
-                $this->analysis->update(['jobs' => $pages]);
-                $desc_jobs = Collection::times($pages / 2)
-                    ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'desc'))
-                    ->toArray();
-                $asc_jobs = Collection::times($pages / 2)
-                    ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'asc'))
-                    ->toArray();
-
-            }
             // Listing count is over 20k
-            else {
-                $this->analysis->update(['jobs' => 20000]);
-                $desc_jobs = Collection::times(100)
-                    ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'desc'))
-                    ->toArray();
-                $asc_jobs = Collection::times(100)
-                    ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'asc'))
-                    ->toArray();
 
-            }
+            $this->analysis->update(['jobs' => 200]);
+            $desc_jobs = Collection::times(100)
+                ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'desc'))
+                ->toArray();
+            $asc_jobs = Collection::times(100)
+                ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'asc'))
+                ->toArray();
+
+
             $jobs = array_merge($desc_jobs, $asc_jobs);
         }
 
