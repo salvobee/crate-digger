@@ -19,6 +19,7 @@ class UpdateReleaseDataJob implements ShouldQueue
         public Release $release
     )
     {
+        $this->onQueue('releases');
     }
 
     /**
