@@ -141,7 +141,7 @@ class SortingCriteriaService
     public static function prepareSortingCriteria(Builder $query, array $parameters): Builder
     {
         if (!array_key_exists('sort', $parameters))
-            return $query->orderBy('created_at', 'DESC');
+            return $query->orderBy('listed_at', 'DESC');
 
         if ($parameters['sort'] === 'community-rating-desc') {
 

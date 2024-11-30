@@ -17,7 +17,7 @@ class SortingCriteriaServiceTest extends TestCase
         $query = Release::query();
         $sortedQuery = SortingCriteriaService::prepareSortingCriteria($query, []);
 
-        $this->assertStringContainsString('order by "created_at" desc', $sortedQuery->toSql());
+        $this->assertStringContainsString('order by "listed_at" desc', $sortedQuery->toSql());
     }
 
     public function test_prepare_sorting_criteria_applies_main_table_sorting()

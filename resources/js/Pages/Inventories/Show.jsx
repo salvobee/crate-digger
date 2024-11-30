@@ -231,6 +231,7 @@ export default function Show(props) {
                                                             </svg>
                                                         </a> : ''
                                                     }
+                                                    <span className={`text-xs text-gray-500`}>{ (new Date(listing.listed_at)).toLocaleDateString() }</span>
                                                 </div>
                                                 <div className="mt-4 flex items-center space-x-2">
                                                     <span className="font-bold">{listing.release.year}</span>

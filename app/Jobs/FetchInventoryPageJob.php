@@ -73,6 +73,7 @@ class FetchInventoryPageJob implements ShouldQueue
                         'comments' => $listing_data['comments'],
                         'ships_from' => $listing_data['ships_from'],
                         'allow_offers' => $listing_data['allow_offers'],
+                        'listed_at' => $listing_data['posted']
                     ]);
                 $this->batch()->add(new UpdateReleaseDataJob($release));
                 $analysis = Analysis::whereBatchId($this->batch()->id)->first();
