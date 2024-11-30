@@ -41,11 +41,35 @@ class AnalysisSpawnerService
         $inventory_data = $this->discogsService()->fetchInventoryData($inventory->seller_username);
         $pagination_data = $inventory_data['pagination'];
         $pages = $pagination_data['pages'];
-        $inventory->update(['total_listings_count' => $pagination_data['items']]);
-        $this->analysis->update(['jobs' => $pages]);
-        $jobs = Collection::times($pages)
-            ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number))
-            ->toArray();
+        $listings_count = $pagination_data['items'];
+        $inventory->update(['total_listings_count' => $listings_count]);
+
+        // DISCOGS will block you to fetch over 100 pages for inventories, so getting 100 items per page
+        // you can list only 10k records
+        // but if you run two crawls ordering the records for the same field but inverting the order in the two
+        // batches you can fetch the double of the records
+
+        // Listing count is less or equal than 10k
+        if ($listings_count <= 10000) {
+            $this->analysis->update(['jobs' => $pages]);
+            $jobs = Collection::times($pages)
+                ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number))
+                ->toArray();
+        } else {
+
+            // Listing count is over 20k
+
+            $this->analysis->update(['jobs' => 200]);
+            $desc_jobs = Collection::times(100)
+                ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'desc'))
+                ->toArray();
+            $asc_jobs = Collection::times(100)
+                ->map(fn($page_number) => new FetchInventoryPageJob($inventory, $page_number, 'listed', 'asc'))
+                ->toArray();
+
+
+            $jobs = array_merge($desc_jobs, $asc_jobs);
+        }
 
         $batch = Bus::batch($jobs)
             ->before(function (Batch $batch) {

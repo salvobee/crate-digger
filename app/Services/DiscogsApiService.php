@@ -33,9 +33,17 @@ class DiscogsApiService
         ]);
     }
 
-    public function fetchInventoryData(mixed $username, int $pageNumber = 1): array
+    public function fetchInventoryData(mixed $username, int $pageNumber = 1, string $sort = null, string $order = null): array
     {
-        return $this->client->getInventory(['username' => $username, 'page' => $pageNumber, 'per_page' => 100])->toArray();
+        return $this->client
+            ->getInventory([
+                'username' => $username,
+                'page' => $pageNumber,
+                'per_page' => 100,
+                'sort' => $sort ?? 'listed',
+                'sort_order' => $order ?? 'desc',
+            ])
+            ->toArray();
     }
 
     public function fetchReleaseData(string $releaseId)
