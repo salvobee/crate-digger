@@ -44,6 +44,6 @@ Route::delete('discogs/delete', [DiscogsServiceController::class, 'destroy'])
 Route::resource('inventories', InventoryController::class);
 
 Route::resource('crates', CrateController::class)
-    ->only(['index','store', 'destroy']);
+    ->only(['index','store', 'update', 'destroy']);
 
 require __DIR__.'/auth.php';

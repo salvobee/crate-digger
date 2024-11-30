@@ -1,4 +1,6 @@
-export default function  ConditionBadge ({ condition }) {
+import {FaRecordVinyl, FaRegSquare} from "react-icons/fa";
+
+export default function  ConditionBadge ({ condition, icon }) {
     const colors = {
         "Mint (M)": 'bg-green-600 text-white',
         "Near Mint (NM or M-)": 'bg-green-400 text-white',
@@ -11,6 +13,11 @@ export default function  ConditionBadge ({ condition }) {
         "Not Graded": 'bg-gray-300 text-black',
     };
 
+    const icons = {
+        'media': <FaRecordVinyl className={`text-gray-500`} />,
+        'sleeve': <FaRegSquare  className={`text-gray-500`}/>
+    }
+
 
     function extractParentheses(text) {
         const match = text.match(/\((.*?)\)/); // Cattura il contenuto tra parentesi
@@ -19,9 +26,10 @@ export default function  ConditionBadge ({ condition }) {
 
     return (
         <span
-            className={`text-nowrap px-2 py-1 text-xs font-semibold rounded ${colors[condition] || 'bg-gray-200'}`}
+            className={`flex space-x-1 items-center text-nowrap px-2 py-1 text-xs font-semibold rounded ${colors[condition] || 'bg-gray-200'}`}
         >
-      {extractParentheses(condition)}
+            { icon && icons[icon] }
+            <span>{extractParentheses(condition)}</span>
     </span>
     );
 };

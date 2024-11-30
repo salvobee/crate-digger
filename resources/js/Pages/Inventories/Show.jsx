@@ -235,7 +235,9 @@ export default function Show(props) {
                                                 <div className="mt-4 flex items-center space-x-2">
                                                     <span className="font-bold">{listing.release.year}</span>
                                                     <span>/</span>
-                                                    <LabelBadge label={listing.release.label}
+                                                    <LabelBadge
+                                                        country={listing.release.country}
+                                                        label={listing.release.label}
                                                                 catalogNumber={listing.release.catalog_number}/>
                                                 </div>
 

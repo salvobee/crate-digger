@@ -33,6 +33,17 @@ class CrateController extends Controller
         return redirect()->back();
     }
 
+    public function update(Request $request, Crate $crate): RedirectResponse
+    {
+        $attributes = $request->validate([
+            'is_liked' => ['boolean']
+        ]);
+
+        $crate->update($attributes);
+
+        return redirect()->back();
+    }
+
     public function destroy(Request $request, Crate $crate): RedirectResponse
     {
         if ($crate->user_id !== $request->user()->id)
