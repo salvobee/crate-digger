@@ -9,6 +9,7 @@ import ConditionBadge from "@/Components/ConditionBadge.jsx";
 import {CountryFlag} from 'react-countryname-flag'
 import CountryFlagBadge from "@/Components/CountryFlagBadge.jsx";
 import LikeCrateButton from "@/Components/LikeCrateButton.jsx";
+import TracksList from "@/Components/TracksList.jsx";
 
 
 export default function Index({crates, selected}) {
@@ -178,6 +179,11 @@ export default function Index({crates, selected}) {
                                                             isCratePlaying(crate) &&
 
                                                             <div className="px-4">
+
+                                                                <div className="mx-4 my-6">
+                                                                    <TracksList release={crate.listing.release} />
+                                                                </div>
+
                                                                 <div className="ml-2 mt-4 flex space-x-4">
 
                                                                     <ReleaseStats layout="row"

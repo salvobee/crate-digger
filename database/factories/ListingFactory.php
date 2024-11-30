@@ -35,6 +35,8 @@ class ListingFactory extends Factory
             'comments' => $this->faker->optional()->sentence(),
             'ships_from' => $this->faker->country(),
             'allow_offers' => $this->faker->boolean(),
+
+            'listed_at' => $this->faker->dateTime(),
         ];
     }
 
