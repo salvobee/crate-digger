@@ -149,11 +149,11 @@ class SortingCriteriaService
             return $query->orderBy(
                 Release::select(
                     DB::raw('
-                        ((releases.have*1) + (releases.want*2))
-                        *
-                        ((releases.rating_average*2) * releases.rating_count)'
+            ((COALESCE(releases.have, 0) * 1) + (COALESCE(releases.want, 0) * 2))
+            *
+            ((COALESCE(releases.rating_average, 0) * 2) * COALESCE(releases.rating_count, 0))'
                     )
-                )->whereColumn("releases.id", "listings.release_id",),
+                )->whereColumn("releases.id", "listings.release_id"),
                 $order
             );
         }
