@@ -33,9 +33,16 @@ export default function AuthenticatedLayout({ header, children }) {
 
                                 <NavLink
                                     href={route('inventories.index')}
-                                    active={route().current('inventories.index')}
+                                    active={route().current('inventories.*')}
                                 >
                                     Record Stores
+                                </NavLink>
+
+                                <NavLink
+                                    href={route('crates.index')}
+                                    active={route().current('crates.*')}
+                                >
+                                    Crates
                                 </NavLink>
                             </div>
                         </div>
@@ -143,9 +150,16 @@ export default function AuthenticatedLayout({ header, children }) {
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('inventories.index')}
-                            active={route().current('inventories.index')}
+                            active={route().current('inventories.*')}
                         >
                             Record Stores
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink
+                            href={route('crates.index')}
+                            active={route().current('crates.*')}
+                        >
+                            Crates
                         </ResponsiveNavLink>
                     </div>
 

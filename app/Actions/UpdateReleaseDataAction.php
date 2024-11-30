@@ -29,7 +29,8 @@ class UpdateReleaseDataAction
         if (array_key_exists("master_id", $release_data))
             $release->master_id = $release_data['master_id'];
 
-        $release->videos = collect($release_data['videos'])->map(fn ($video_data) => $video_data['uri'])->values()->toArray();
+        $release->videos = collect($release_data['videos'])->values()->toArray();
+        $release->tracks_list = collect($release_data['tracklist'])->toArray();
 
         $release->save();
 

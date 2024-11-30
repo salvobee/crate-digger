@@ -16,6 +16,8 @@ class UpdateReleaseDataActionTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $trackList;
+
     public function test_it_updates_release_data_correctly(): void
     {
         // Arrange
@@ -23,6 +25,54 @@ class UpdateReleaseDataActionTest extends TestCase
             'discogs_id' => 1975455,
         ]);
 
+        $this->trackList = [
+            [
+                "position" => "A1",
+                "type_" => "track",
+                "title" => "A New Error",
+                "duration" => "6:07",
+            ],
+            [
+                "position" => "A2",
+                "type_" => "track",
+                "title" => "Rusty Nails",
+                "extraartists" => [
+                    [
+                        "name" => "Sascha Ring",
+                        "anv" => "S. Ring",
+                        "join" => "",
+                        "role" => "Vocals",
+                        "tracks" => "",
+                        "id" => 66303,
+                        "resource_url" => "https://api.discogs.com/artists/66303",
+                    ],
+                ],
+                "duration" => "4:32",
+            ],
+            [
+                "position" => "A3",
+                "type_" => "track",
+                "title" => "Seamonkey",
+                "duration" => "6:14",
+            ],
+            [
+                "position" => "A4",
+                "type_" => "track",
+                "title" => "Slow Match",
+                "extraartists" => [
+                    [
+                        "name" => "Paul St. Hilaire",
+                        "anv" => "",
+                        "join" => "",
+                        "role" => "Featuring, Vocals",
+                        "tracks" => "",
+                        "id" => 104604,
+                        "resource_url" => "https://api.discogs.com/artists/104604",
+                    ],
+                ],
+                "duration" => "5:08",
+            ],
+        ];
         $discogsApiResponse = [
             'country' => 'Italy',
             'community' => [
@@ -35,9 +85,20 @@ class UpdateReleaseDataActionTest extends TestCase
             'num_for_sale' => 13,
             'lowest_price' => 1.54,
             'videos' => [
-                ['uri' => 'https://www.youtube.com/watch?v=MKk-a7qamdk'],
-                ['uri' => 'https://www.youtube.com/watch?v=YVlG6GIMBTY'],
+                [
+                    'title' => 'Title',
+                    'description' => 'description',
+                    'uri' => 'https://www.youtube.com/watch?v=MKk-a7qamdk',
+                    'embed' => true,
+                ],
+                [
+                    'title' => 'Title',
+                    'description' => 'description',
+                    'uri' => 'https://www.youtube.com/watch?v=YVlG6GIMBTY',
+                    'embed' => true,
+                ],
             ],
+            'tracklist' => $this->trackList,
             'genres' => ['Electronic'],
             'styles' => ['Euro House'],
             'formats' => [
@@ -71,10 +132,20 @@ class UpdateReleaseDataActionTest extends TestCase
             'lowest_price' => 1.54,
         ]);
 
-        $this->assertEquals([
-            'https://www.youtube.com/watch?v=MKk-a7qamdk',
-            'https://www.youtube.com/watch?v=YVlG6GIMBTY',
-        ], $release->fresh()->videos);
+        $this->assertEquals($this->trackList, $release->fresh()->tracks_list);
+
+        $this->assertEquals([[
+            'title' => 'Title',
+            'description' => 'description',
+            'uri' => 'https://www.youtube.com/watch?v=MKk-a7qamdk',
+            'embed' => true,
+        ],
+            [
+                'title' => 'Title',
+                'description' => 'description',
+                'uri' => 'https://www.youtube.com/watch?v=YVlG6GIMBTY',
+                'embed' => true,
+            ]], $release->fresh()->videos);
 
         $this->assertCount(1, Genre::all());
         $this->assertDatabaseHas('genres', ['name' => 'Electronic']);

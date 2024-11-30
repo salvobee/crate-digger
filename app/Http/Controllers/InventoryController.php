@@ -67,11 +67,7 @@ class InventoryController extends Controller
         $parameters = $request->validate([
             'sort' => [ Rule::in(SortingCriteriaService::sortingCriteriaKeys())],
             'filters' => [
-//                Rule::array(
-//                    collect(Listing::facetDefinitions())
-//                        ->pluck('fieldname')
-//                        ->toArray()
-//                )
+//                Rule::array(ListingFilterService::getValidFieldsList())
             ]
         ]);
 
@@ -88,12 +84,7 @@ class InventoryController extends Controller
        );
 
 
-        $facets = collect(Listing::getFacets())
-            ->map(function (Facet $facet)  {
-                $facet_array = $facet->toArray();
-                $facet_array['options'] = $facet->getOptions();
-                return $facet_array;
-            });
+        $facets = ListingFilterService::getFacetsDefinitions();
 
         if (!array_key_exists('sort', $parameters))
             $parameters['sort'] = 'default';
@@ -103,7 +94,9 @@ class InventoryController extends Controller
 
         $props = [
             'criteria' => SortingCriteriaService::SCHEMA,
+            'crates' => $request->user()->crates,
             'store' => $inventory,
+            'other_filters' => [],
             'facets' => $facets,
             'parameters' => $parameters,
             'listings' => $listing_query

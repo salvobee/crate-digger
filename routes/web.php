@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CrateController;
 use App\Http\Controllers\DiscogsServiceController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
@@ -34,12 +35,17 @@ Route::post('oauth/discogs/callback', [DiscogsServiceController::class, 'store']
     ->middleware('auth');
 Route::get('oauth/discogs/callback', [DiscogsServiceController::class, 'store'])
     ->name('discogs.store.get')
-    ->middleware('auth');;
+    ->middleware('auth');
 
 Route::delete('discogs/delete', [DiscogsServiceController::class, 'destroy'])
     ->name('discogs.destroy')
-    ->middleware('auth');;
+    ->middleware('auth');
 
-    Route::resource('inventories', InventoryController::class);
+Route::resource('inventories', InventoryController::class)
+    ->middleware('auth');
+
+Route::resource('crates', CrateController::class)
+    ->middleware('auth')
+    ->only(['index','store', 'update', 'destroy']);
 
 require __DIR__.'/auth.php';

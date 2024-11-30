@@ -27,25 +27,30 @@ class Listing extends Model
             ],
             [
                 'title' => 'Year',
-                'fieldname' => 'release.year' // Use dot notation to get the value from related models.
+                'fieldname' => 'release.year',
+                'sort_alphabetically' => true,
             ],
             [
                 'title' => 'Label',
-                'fieldname' => 'release.label' // Use dot notation to get the value from related models.
+                'fieldname' => 'release.label',
+                'sort_alphabetically' => true, // Use dot notation to get the value from related models.
             ],
             [
                 'title' => 'Genre',
-                'fieldname' => 'release.genres.name' // Use dot notation to get the value from related models.
+                'fieldname' => 'release.genres.name',
+                'sort_alphabetically' => true, // Use dot notation to get the value from related models.
             ],
             [
                 'title' => 'Styles',
-                'fieldname' => 'release.styles.name' // Use dot notation to get the value from related models.
+                'fieldname' => 'release.styles.name',
+                'sort_alphabetically' => true, // Use dot notation to get the value from related models.
             ]
         ];
     }
 
     protected $with = [
-        'release'
+        'release',
+        'inventory'
     ];
 
     public function inventory(): BelongsTo
