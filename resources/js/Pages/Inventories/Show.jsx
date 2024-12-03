@@ -73,7 +73,7 @@ export default function Show(props) {
         router.post(`/crates`, { listing: listingId }, { preserveScroll: true })
     };
     const handleRemoveFromCrate = (crateId) => {
-        router.delete(`/crates/${crateId}`)
+        router.delete(`/crates/${crateId}`, { preserveScroll: true })
     };
 
 
