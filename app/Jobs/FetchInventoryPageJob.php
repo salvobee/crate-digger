@@ -27,7 +27,6 @@ class FetchInventoryPageJob implements ShouldQueue
         public string $sortOrder = 'desc'
     )
     {
-        $this->onQueue('inventory');
     }
 
 

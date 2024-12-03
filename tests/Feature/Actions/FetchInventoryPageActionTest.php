@@ -3,10 +3,12 @@
 namespace Tests\Feature\Actions;
 
 use App\Actions\FetchInventoryPageAction;
+use App\Jobs\UpdateReleaseDataJob;
 use App\Models\Analysis;
 use App\Models\Inventory;
 use App\Services\DiscogsApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Mockery;
 use Tests\TestCase;
 
@@ -16,6 +18,7 @@ class FetchInventoryPageActionTest extends TestCase
 
     public function test_execute_fetches_inventory_and_updates_database()
     {
+        Bus::fake();
         // Mock del servizio DiscogsApiService
         $discogsApiService = Mockery::mock(DiscogsApiService::class);
         $this->app->instance(DiscogsApiService::class, $discogsApiService);
@@ -96,10 +99,7 @@ class FetchInventoryPageActionTest extends TestCase
             'price_value' => 15.99,
         ]);
 
-        // Assert che il batch abbia aggiornato l'analisi
-        $this->assertDatabaseHas('analyses', [
-            'batch_id' => $batch->id,
-            'jobs' => 1,
-        ]);
+
+        Bus::assertDispatched(UpdateReleaseDataJob::class);
     }
 }

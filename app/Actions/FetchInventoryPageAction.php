@@ -67,12 +67,13 @@ class FetchInventoryPageAction
                         'allow_offers' => $listing_data['allow_offers'],
                         'listed_at' => $listing_data['posted']
                     ]);
-                if (isset($this->batch)) {
-                    $this->batch->add(new UpdateReleaseDataJob($release));
-                    $analysis = Analysis::whereBatchId($this->batch->id)->first();
-                    $analysis->jobs++;
-                    $analysis->save();
-                }
+//                if (isset($this->batch)) {
+//                    $this->batch->add(new UpdateReleaseDataJob($release));
+//                    $analysis = Analysis::whereBatchId($this->batch->id)->first();
+//                    $analysis->jobs++;
+//                    $analysis->save();
+//                }
+                UpdateReleaseDataJob::dispatch($release);
             });
             DB::commit();
         } catch (\Exception $e)
