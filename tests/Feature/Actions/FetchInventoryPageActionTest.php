@@ -68,20 +68,9 @@ class FetchInventoryPageActionTest extends TestCase
             'seller_username' => 'test_seller',
         ]);
 
-        // Simula il batch per i job
-        $batch = Mockery::mock(\Illuminate\Bus\Batch::class);
-        $batch->id = 1;
-        $batch->shouldReceive('add')->andReturnNull();
-
-        // Simula l'analisi associata al batch
-        $analysis = Analysis::factory()->create([
-            'batch_id' => $batch->id,
-            'jobs' => 0,
-        ]);
 
         // Inizializza l'action
         $action = new FetchInventoryPageAction($discogsApiService);
-        $action->setBatch($batch);
 
         // Esegui l'action
         $action->execute($inventory, 1);
