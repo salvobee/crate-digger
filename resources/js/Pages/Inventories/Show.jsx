@@ -10,6 +10,7 @@ import Facet from "@/Components/Facet.jsx";
 import {useEffect, useState} from "react";
 import {FaBoxArchive} from "react-icons/fa6";
 import YearRangeSelector from "@/Components/YearRangeSelector.jsx";
+import QuickPaginator from "@/Components/QuickPaginator.jsx";
 
 export default function Show(props) {
 
@@ -143,9 +144,10 @@ export default function Show(props) {
 
                             <div className="w-4/5">
                                 <div className="mb-4 flex items-center justify-between">
+
+                                    <QuickPaginator links={listings.links} />
                                 <h1>
-                                        <strong>{listings.total}</strong> listings in {store.seller_username}'s
-                                        Inventory</h1>
+                                    Showing   <strong>{listings.total}</strong> listings</h1>
 
                                     <div className="flex items-center space-x-2">
                                         <span>Sort by</span>
