@@ -27,7 +27,7 @@ export default function Pagination({ links }) {
                                 key={key}
                                 className="mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded"
                                 dangerouslySetInnerHTML={renderLabel(link.label)}
-                            ></div>)
+                            />)
                             : (<Link
                                 key={key}
                                 className={getClassName(link.active)}
