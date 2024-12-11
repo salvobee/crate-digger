@@ -107,6 +107,41 @@ class UpdateReleaseDataActionTest extends TestCase
                     'descriptions' => ['12"'],
                 ],
             ],
+            'images' => [
+                [
+                    "type" => "primary",
+                    "uri" =>  "https://discogs.com/images/test-01.png",
+                    "resource_url" => "https://api.discogs.com/images/test-01.png",
+                    "uri150" =>  "https://discogs.com/images/150/test-01.png",
+                    "width" => 600,
+                    "height" => 480
+                ],
+                [
+                    "type" => "secondary",
+                    "uri" =>  "https://discogs.com/images/test-02.png",
+                    "resource_url" => "https://api.discogs.com/images/test-02.png",
+                    "uri150" =>  "https://discogs.com/images/150/test-02.png",
+                    "width" => 600,
+                    "height" => 480
+                ],
+                [
+                    "type" => "secondary",
+                    "uri" =>  "https://discogs.com/images/test-03.png",
+                    "resource_url" => "https://api.discogs.com/images/test-03.png",
+                    "uri150" =>  "https://discogs.com/images/150/test-03.png",
+                    "width" => 600,
+                    "height" => 480
+                ],
+                [
+                    "type" => "secondary",
+                    "uri" =>  "https://discogs.com/images/test-04.png",
+                    "resource_url" => "https://api.discogs.com/images/test-04.png",
+                    "uri150" =>  "https://discogs.com/images/150/test-04.png",
+                    "width" => 600,
+                    "height" => 480
+                ],
+
+            ]
         ];
 
         // Mock DiscogsApiService
@@ -146,6 +181,41 @@ class UpdateReleaseDataActionTest extends TestCase
                 'uri' => 'https://www.youtube.com/watch?v=YVlG6GIMBTY',
                 'embed' => true,
             ]], $release->fresh()->videos);
+
+        $this->assertEquals([
+            [
+                "type" => "primary",
+                "uri" =>  "https://discogs.com/images/test-01.png",
+                "resource_url" => "https://api.discogs.com/images/test-01.png",
+                "uri150" =>  "https://discogs.com/images/150/test-01.png",
+                "width" => 600,
+                "height" => 480
+            ],
+            [
+                "type" => "secondary",
+                "uri" =>  "https://discogs.com/images/test-02.png",
+                "resource_url" => "https://api.discogs.com/images/test-02.png",
+                "uri150" =>  "https://discogs.com/images/150/test-02.png",
+                "width" => 600,
+                "height" => 480
+            ],
+            [
+                "type" => "secondary",
+                "uri" =>  "https://discogs.com/images/test-03.png",
+                "resource_url" => "https://api.discogs.com/images/test-03.png",
+                "uri150" =>  "https://discogs.com/images/150/test-03.png",
+                "width" => 600,
+                "height" => 480
+            ],
+            [
+                "type" => "secondary",
+                "uri" =>  "https://discogs.com/images/test-04.png",
+                "resource_url" => "https://api.discogs.com/images/test-04.png",
+                "uri150" =>  "https://discogs.com/images/150/test-04.png",
+                "width" => 600,
+                "height" => 480
+            ],
+        ], $release->fresh()->images);
 
         $this->assertCount(1, Genre::all());
         $this->assertDatabaseHas('genres', ['name' => 'Electronic']);

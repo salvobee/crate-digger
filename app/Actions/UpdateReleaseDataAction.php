@@ -31,6 +31,7 @@ class UpdateReleaseDataAction
             $release->master_id = $release_data['master_id'];
 
         $release->videos = collect($release_data['videos'])->values()->toArray();
+        $release->images = collect($release_data['images'])->values()->toArray();
         $release->tracks_list = collect($release_data['tracklist'])->toArray();
 
         $release->save();

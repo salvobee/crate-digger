@@ -29,6 +29,7 @@ class StoreMasterRecordAction
                 'discogs_url' => $masterData['uri'],
                 'discogs_main_release_id' => $masterData['main_release'],
                 'discogs_most_recent_release_id' => $masterData['most_recent_release'] ?? $masterData['main_release'],
+                'images' => $masterData['images'],
                 'meta' => $masterData,
             ]);
 

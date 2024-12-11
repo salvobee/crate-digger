@@ -14,6 +14,7 @@ class Release extends Model
     use HasFactory, HasUuids;
 
     protected $casts = [
+        'images' => 'array',
         'videos' => 'array',
         'tracks_list' => 'array',
     ];

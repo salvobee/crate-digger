@@ -15,7 +15,6 @@ class StoreMasterRecordActionTest extends TestCase
 
     public function test_execute_creates_record_with_genres_and_styles()
     {
-        $discogsApiService = $this->mock(DiscogsApiService::class);
         $test_master_id = "";
         $this->mockDiscogsResponse();
 
@@ -62,27 +61,61 @@ class StoreMasterRecordActionTest extends TestCase
             ->shouldReceive('fetchMasterData')
             ->once()
             ->andReturn([
-            'id' => 1050282,
-            'title' => 'Test Album',
-            'year' => 1999,
-            'uri' => 'https://discogs.com/master/123',
-            'main_release' => 123,
-            'most_recent_release' => 456,
-            'genres' => ['Electronic'],
-            'artists' => [
-                [
-                    "name" => "Alphatek (2)",
-                    "anv" => "",
-                    "join" => "",
-                    "role" => "",
-                    "tracks" => "",
-                    "id" => 251017,
-                    "resource_url" => "https://api.discogs.com/artists/251017",
+                'id' => 1050282,
+                'title' => 'Test Album',
+                'year' => 1999,
+                'uri' => 'https://discogs.com/master/123',
+                'main_release' => 123,
+                'most_recent_release' => 456,
+                'genres' => ['Electronic'],
+                'artists' => [
+                    [
+                        "name" => "Alphatek (2)",
+                        "anv" => "",
+                        "join" => "",
+                        "role" => "",
+                        "tracks" => "",
+                        "id" => 251017,
+                        "resource_url" => "https://api.discogs.com/artists/251017",
+                    ]
+                ],
+                'styles' => ['Techno', 'House'],
+                'notes' => 'A classic album.',
+                'images' => [
+                    [
+                        "type" => "primary",
+                        "uri" => "https://discogs.com/images/test-01.png",
+                        "resource_url" => "https://api.discogs.com/images/test-01.png",
+                        "uri150" => "https://discogs.com/images/150/test-01.png",
+                        "width" => 600,
+                        "height" => 480
+                    ],
+                    [
+                        "type" => "secondary",
+                        "uri" => "https://discogs.com/images/test-02.png",
+                        "resource_url" => "https://api.discogs.com/images/test-02.png",
+                        "uri150" => "https://discogs.com/images/150/test-02.png",
+                        "width" => 600,
+                        "height" => 480
+                    ],
+                    [
+                        "type" => "secondary",
+                        "uri" => "https://discogs.com/images/test-03.png",
+                        "resource_url" => "https://api.discogs.com/images/test-03.png",
+                        "uri150" => "https://discogs.com/images/150/test-03.png",
+                        "width" => 600,
+                        "height" => 480
+                    ],
+                    [
+                        "type" => "secondary",
+                        "uri" => "https://discogs.com/images/test-04.png",
+                        "resource_url" => "https://api.discogs.com/images/test-04.png",
+                        "uri150" => "https://discogs.com/images/150/test-04.png",
+                        "width" => 600,
+                        "height" => 480
+                    ],
                 ]
-            ],
-            'styles' => ['Techno', 'House'],
-            'notes' => 'A classic album.',
-        ]);
+            ]);
     }
 
     public function test_it_will_update_existing_record()
@@ -121,6 +154,41 @@ class StoreMasterRecordActionTest extends TestCase
                 "resource_url" => "https://api.discogs.com/artists/251017",
             ]
         ], $record->artists);
+
+        $this->assertEquals([
+            [
+                "type" => "primary",
+                "uri" => "https://discogs.com/images/test-01.png",
+                "resource_url" => "https://api.discogs.com/images/test-01.png",
+                "uri150" => "https://discogs.com/images/150/test-01.png",
+                "width" => 600,
+                "height" => 480
+            ],
+            [
+                "type" => "secondary",
+                "uri" => "https://discogs.com/images/test-02.png",
+                "resource_url" => "https://api.discogs.com/images/test-02.png",
+                "uri150" => "https://discogs.com/images/150/test-02.png",
+                "width" => 600,
+                "height" => 480
+            ],
+            [
+                "type" => "secondary",
+                "uri" => "https://discogs.com/images/test-03.png",
+                "resource_url" => "https://api.discogs.com/images/test-03.png",
+                "uri150" => "https://discogs.com/images/150/test-03.png",
+                "width" => 600,
+                "height" => 480
+            ],
+            [
+                "type" => "secondary",
+                "uri" => "https://discogs.com/images/test-04.png",
+                "resource_url" => "https://api.discogs.com/images/test-04.png",
+                "uri150" => "https://discogs.com/images/150/test-04.png",
+                "width" => 600,
+                "height" => 480
+            ],
+        ], $record->images);
 
         $this->assertEquals('Alphatek (2) - Test Album', $record->display_title);
     }

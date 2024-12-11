@@ -15,6 +15,7 @@ class Record extends Model
     use HasFactory, HasUuids;
 
     public $casts = [
+        'images' => 'array',
         'artists' => 'array',
         'meta' => SchemalessAttributes::class,
     ];
