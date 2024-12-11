@@ -4,10 +4,13 @@ namespace Tests\Feature\Actions;
 
 use App\Actions\FetchListAction;
 use App\Enums\UserListItemType;
+use App\Jobs\FetchMasterDataJob;
+use App\Jobs\UpdateReleaseDataJob;
 use App\Models\UserList;
 use App\Models\UserListItem;
 use App\Services\DiscogsApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Mockery;
 use Tests\TestCase;
 
@@ -16,9 +19,11 @@ class FetchListActionTest extends TestCase
     use RefreshDatabase;
     public function test_it_will_fetch_a_list_of_releases_and_its_items()
     {
+        Bus::fake();
+        $test_list_id = "1565197";
+        $this->mockReleaseListResponse();
         $action = app(FetchListAction::class);
 
-        $test_list_id = "1565197";
         $action->execute($test_list_id);
 
         $this->assertDatabaseHas(UserList::class, [
@@ -38,6 +43,20 @@ class FetchListActionTest extends TestCase
             "display_title" => "Black Box - Dreamland",
             "comment" => "On the italian label Groove Groove Melody",
         ]);
+        Bus::assertNotDispatched(UpdateReleaseDataJob::class);
+        Bus::assertNotDispatched(FetchMasterDataJob::class);
+    }
+
+    public function test_it_will_dispatch_fetch_jobs_if_selected()
+    {
+        Bus::fake();
+        $this->mockReleaseListResponse();
+        $action = app(FetchListAction::class);
+
+        $test_list_id = "1565197";
+        $action->execute($test_list_id, true);
+        Bus::assertDispatchedTimes(UpdateReleaseDataJob::class, 6);
+        Bus::assertDispatchedTimes(FetchMasterDataJob::class, 3);
     }
 
     private function mockReleaseListResponse(): void
