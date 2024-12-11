@@ -50,4 +50,9 @@ class DiscogsApiService
     {
         return $this->client->getRelease(['id' => $releaseId])->toArray();
     }
+
+    public function fetchList(string $listId): array
+    {
+        return $this->client->getLists(['list_id' => $listId])->toArray();
+    }
 }
