@@ -16,7 +16,7 @@ class UpdateReleaseDataJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public Release $release
+        public string $releaseId
     )
     {
         $this->onQueue('releases');
@@ -27,6 +27,6 @@ class UpdateReleaseDataJob implements ShouldQueue
      */
     public function handle(UpdateReleaseDataAction $action): void
     {
-        $action->execute($this->release);
+        $action->execute($this->releaseId);
     }
 }

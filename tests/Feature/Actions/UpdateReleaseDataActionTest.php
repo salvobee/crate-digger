@@ -119,7 +119,7 @@ class UpdateReleaseDataActionTest extends TestCase
         $action = new UpdateReleaseDataAction($discogsApiService);
 
         // Act
-        $action->execute($release);
+        $action->execute($release->discogs_id);
 
         // Assert
         $this->assertDatabaseHas('releases', [

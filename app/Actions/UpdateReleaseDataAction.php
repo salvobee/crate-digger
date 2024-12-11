@@ -16,10 +16,11 @@ class UpdateReleaseDataAction
     {
     }
 
-    public function execute(Release $release): void
+    public function execute(string $releaseId): void
     {
-        $release_data = $this->discogsApiService->fetchReleaseData($release->discogs_id);
+        $release_data = $this->discogsApiService->fetchReleaseData($releaseId);
 
+        $release = Release::query()->firstOrNew(['discogs_id' => $releaseId]);
         $release->country = $release_data['country'];
         $release->rating_average = $release_data['community']['rating']['average'];
         $release->rating_count = $release_data['community']['rating']['count'];

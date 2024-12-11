@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Crate;
+namespace Tests\Feature\Crates;
 
 use App\Actions\UpdateReleaseDataAction;
 use App\Models\Crate;
@@ -38,7 +38,7 @@ class CrateControllerTest extends TestCase
         $listing->release()->associate($release)->save();
 
         $mockAction = Mockery::mock(UpdateReleaseDataAction::class);
-        $mockAction->shouldReceive('execute')->once()->with(Mockery::type(Release::class));
+        $mockAction->shouldReceive('execute')->once();
 
         $this->instance(UpdateReleaseDataAction::class, $mockAction);
 

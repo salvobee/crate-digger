@@ -29,7 +29,7 @@ class CrateController extends Controller
         ]);
         $request->user()->crates()->create(['listing_id' => $attributes['listing']]);
         $listing = Listing::find($attributes['listing']);
-        $updateReleaseDataAction->execute($listing->release);
+        $updateReleaseDataAction->execute($listing->release->discogs_id);
         return redirect()->back();
     }
 
