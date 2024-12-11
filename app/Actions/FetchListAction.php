@@ -22,12 +22,16 @@ class FetchListAction
         $list_data = $this->discogsApiService->fetchList($listId);
 
 
-        $list = UserList::create([
-            'discogs_id' => $list_data['id'],
-            'discogs_url' => $list_data['uri'],
-            'name' => $list_data['name'],
-            'description' => $list_data['description'],
-        ]);
+        $list = UserList::updateOrCreate(
+            [
+                'discogs_id' => $list_data['id']
+            ],
+            [
+                'discogs_url' => $list_data['uri'],
+                'name' => $list_data['name'],
+                'description' => $list_data['description']
+            ]
+        );
 
         foreach ($list_data['items'] as $list_item) {
             $list->items()->create([

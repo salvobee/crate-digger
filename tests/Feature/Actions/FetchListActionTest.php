@@ -59,6 +59,23 @@ class FetchListActionTest extends TestCase
         Bus::assertDispatchedTimes(FetchMasterDataJob::class, 3);
     }
 
+    public function test_it_will_update_existing_list_instead_of_creating_new()
+    {
+        $test_list_id = '1565197';
+        $existing_list = UserList::factory()->create(['discogs_id' => $test_list_id]);
+
+        $this->mockReleaseListResponse();
+        $action = app(FetchListAction::class);
+        $action->execute($test_list_id);
+
+        $this->assertEquals(1, UserList::query()->whereDiscogsId($test_list_id)->count());
+        $this->assertEquals($existing_list->refresh()->discogs_id, $test_list_id);
+        $this->assertEquals($existing_list->refresh()->discogs_url, 'https://www.discogs.com/lists/1990-Global-Dance-Albums/1565197');
+        $this->assertEquals($existing_list->refresh()->name, '1990 Global Dance Albums');
+        $this->assertEquals($existing_list->refresh()->description, 'A list of world famous Dance Albums from year 1990');
+        $this->assertCount(9, $existing_list->refresh()->items);
+    }
+
     private function mockReleaseListResponse(): void
     {
         $discogsApiService = Mockery::mock(DiscogsApiService::class);
