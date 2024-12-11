@@ -55,4 +55,9 @@ class DiscogsApiService
     {
         return $this->client->getLists(['list_id' => $listId])->toArray();
     }
+
+    public function fetchMasterData(string $masterId): array
+    {
+        return $this->client->getMaster(['id' => $masterId])->toArray();
+    }
 }
