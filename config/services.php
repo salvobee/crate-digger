@@ -38,7 +38,9 @@ return [
     'discogs' => [
         'client_id' => env('DISCOGS_CLIENT_ID'),
         'client_secret' => env('DISCOGS_CLIENT_SECRET'),
-        'redirect' => env('DISCOGS_REDIRECT_URI')
+        'redirect' => env('DISCOGS_REDIRECT_URI'),
+        'personal_access_token' => env('DISCOGS_PERSONAL_ACCESS_TOKEN'),
+        'use_personal_access_token' => env('DISCOGS_USE_PERSONAL_ACCESS_TOKEN', false)
     ],
 
 ];

@@ -11,7 +11,10 @@ class DiscogsApiService
 
     public function __construct(protected Service $service)
     {
-        $this->setupOauthClient();
+        if (config('services.discogs.use_personal_access_token'))
+            $this->setupPersonalAccessClient();
+        else
+            $this->setupOauthClient();
     }
 
     private function setupOauthClient(): void
@@ -22,15 +25,37 @@ class DiscogsApiService
             'token'           => $this->service->meta->token,
             'token_secret'    => $this->service->meta->tokenSecret
         ]);
-        $handler = \GuzzleHttp\HandlerStack::create();
-        $throttle = new \Discogs\Subscriber\ThrottleSubscriber;
-        $handler->push(\GuzzleHttp\Middleware::retry($throttle->decider(), $throttle->delay()));
+        $handler = $this->getHandlerStack();
         $handler->push($oauth);
 
         $this->client = \Discogs\ClientFactory::factory([
             'handler' => $handler,
             'auth' => 'oauth'
         ]);
+    }
+
+    private function setupPersonalAccessClient(): void
+    {
+        $access_token = config('services.discogs.personal_access_token');
+        throw_if(empty($access_token), new \LogicException('missing access token param'));
+
+        $this->client = \Discogs\ClientFactory::factory([
+            'handler' => $this->getHandlerStack(),
+            'headers' => [
+                'Authorization' => "Discogs token={$access_token}",
+            ]
+        ]);
+    }
+
+    /**
+     * @return \GuzzleHttp\HandlerStack
+     */
+    private function getHandlerStack(): \GuzzleHttp\HandlerStack
+    {
+        $handler = \GuzzleHttp\HandlerStack::create();
+        $throttle = new \Discogs\Subscriber\ThrottleSubscriber;
+        $handler->push(\GuzzleHttp\Middleware::retry($throttle->decider(), $throttle->delay()));
+        return $handler;
     }
 
     public function fetchInventoryData(mixed $username, int $pageNumber = 1, string $sort = null, string $order = null): array
