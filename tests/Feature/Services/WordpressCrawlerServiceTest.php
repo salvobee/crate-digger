@@ -10,9 +10,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use Tests\Traits\HasDecaDanceFixtures;
 
 class WordpressCrawlerServiceTest extends TestCase
 {
+    use HasDecaDanceFixtures;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -114,37 +117,6 @@ class WordpressCrawlerServiceTest extends TestCase
             'https://example.com/test-article' => Http::response('', 404),
         ]);
         $this->service->fetchSingleArticlePage('https://example.com/test-article');
-    }
-
-    /**
-     * @return string
-     */
-    private function getSingleMockedArticleHtml(): string
-    {
-        return file_get_contents(base_path('tests/Fixtures/Decadance/single_article_page.html'));
-    }
-
-    protected function getMockedArticleListHtml(): false|string
-    {
-        return file_get_contents(base_path('tests/Fixtures/Decadance/articles_list_page.html'));
-    }
-
-    private function getHomePageMockedHtml(): false|string
-    {
-        return file_get_contents(base_path('tests/Fixtures/Decadance/home_page.html'));
-    }
-
-    /**
-     * @return string
-     */
-    private function getExpectedParagraphForSingleArticle(): string
-    {
-        return '<p>Ad inaugurare il catalogo sono loro stessi, nascosti dietro l’alias Razor Boy &amp;';
-    }
-
-    private function getExpectedParagraphForListPage(): string
-    {
-        return "<p>La Time Records dei primi tempi è, come sottolineato nel libro, ispirata dai dischi che giungono dall’altra parte dell’Atlantico a firma Patrick Cowley e Bobby Orlando";
     }
 
 }
