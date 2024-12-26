@@ -52,6 +52,9 @@ class WordpressCrawlerServiceTest extends TestCase
         $this->assertEquals(Carbon::parse('2015-09-09 14:49:11.000000'), $article->published_at);
         $this->assertEquals('Decadance', $article->author);
         $this->assertEquals('example.com', $article->source);
+        $tags = collect($article->tags);
+        $this->assertTrue($tags->contains(fn($tag) => $tag === 'Aphex Twin'));
+        $this->assertTrue($tags->contains(fn($tag) => $tag === 'Colin Faver'));
     }
 
     public function test_it_fetches_and_saves_articles_from_a_list_page()
