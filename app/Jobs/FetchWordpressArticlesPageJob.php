@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Services\WordpressCrawlerService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -12,7 +13,7 @@ class FetchWordpressArticlesPageJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(public string $listPageUrl)
     {
         $this->onQueue('articles');
     }
@@ -20,8 +21,8 @@ class FetchWordpressArticlesPageJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(WordpressCrawlerService $crawlerService): void
     {
-        //
+        $crawlerService->fetchArticlesListPage($this->listPageUrl);
     }
 }
