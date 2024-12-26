@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('source');
-            $table->string('title');
-            $table->longText('content')->nullable();
-            $table->dateTime('published_at')->nullable();
-            $table->string('author')->nullable();
+            $table->string('name');
             $table->timestamps();
+        });
+
+        Schema::create('taggables', function (Blueprint $table) {
+            $table->uuid('tag_id');
+            $table->uuid('taggable_id');
+            $table->string('taggable_type');
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('tags');
     }
 };

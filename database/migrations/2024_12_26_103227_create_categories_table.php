@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('source');
-            $table->string('title');
-            $table->longText('content')->nullable();
-            $table->dateTime('published_at')->nullable();
-            $table->string('author')->nullable();
+            $table->string('name');
             $table->timestamps();
+        });
+
+        Schema::create('categorizables', function (Blueprint $table) {
+            $table->uuid('category_id');
+            $table->uuid('categorizable_id');
+            $table->string('categorizable_type');
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('categories');
     }
 };

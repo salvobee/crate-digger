@@ -55,12 +55,9 @@ class WordpressCrawlerServiceTest extends TestCase
         $this->assertEquals(Carbon::parse('2015-09-09 14:49:11.000000'), $article->published_at);
         $this->assertEquals('Decadance', $article->author);
         $this->assertEquals('example.com', $article->source);
-        $tags = collect($article->tags);
-        $this->assertTrue($tags->contains(fn($tag) => $tag === 'Aphex Twin'));
-        $this->assertTrue($tags->contains(fn($tag) => $tag === 'Colin Faver'));
-
-        $categories = collect($article->categories);
-        $this->assertTrue($categories->contains(fn($tag) => $tag === 'Dischi Raccontati'));
+        $this->assertTrue($article->tags->contains(fn($tag) => $tag->name === 'Aphex Twin'));
+        $this->assertTrue($article->tags->contains(fn($tag) => $tag->name === 'Colin Faver'));
+        $this->assertTrue($article->categories->contains(fn($category) => $category->name === 'Dischi Raccontati'));
     }
 
     public function test_it_fetches_and_saves_articles_from_a_list_page()
@@ -81,10 +78,10 @@ class WordpressCrawlerServiceTest extends TestCase
         $this->assertEquals(Carbon::parse('2015-09-25T13:00:36.000000+0000'), $article->published_at);
         $this->assertEquals('Decadance', $article->author);
         $this->assertEquals('example.com', $article->source);
-        $tags = collect($article->tags);
-        $this->assertCount(18, $tags);
-        $this->assertTrue($tags->contains(fn($tag) => $tag === 'Albertino'));
-        $this->assertTrue($tags->contains(fn($tag) => $tag === 'Bobby Orlando'));
+        $this->assertCount(18, $article->tags);
+        $this->assertTrue($article->tags->contains(fn($tag) => $tag->name === 'Albertino'));
+        $this->assertTrue($article->tags->contains(fn($tag) => $tag->name === 'Bobby Orlando'));
+        $this->assertTrue($article->categories->contains(fn($category) => $category->name === 'Libri Raccontati'));
     }
 
     public function test_it_will_update_existing_single_article()

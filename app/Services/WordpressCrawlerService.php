@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Exceptions\WordpressCrawlerException;
 use App\Models\Article;
+use App\Models\Category;
+use App\Models\Tag;
+use DOMElement;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\DomCrawler\Crawler;
@@ -72,21 +75,24 @@ class WordpressCrawlerService
 
         $author = $node->filter('span.author.vcard > a')->text();
 
-        $tags = $node->filter('span.tags-links a')
-            ->each(fn ($tagNode) =>  $tagNode->text());
+        $tags = collect($node->filter('span.tags-links a'))
+            ->map(fn (DOMElement $tagNode) =>  Tag::updateOrCreate(['name' => $tagNode->textContent]));
 
-        $categories = $node->filter('span.cat-links a')
-            ->each(fn ($tagNode) =>  $tagNode->text());
+        $categories = collect($node->filter('span.cat-links a'))
+            ->map(fn (DOMElement $tagNode) =>  Category::updateOrCreate(['name' => $tagNode->textContent]));
 
-        return Article::updateOrCreate(
+        /** @var Article $article */
+        $article = Article::updateOrCreate(
             ['source' => $source, 'title' =>  $title],
             [
                 'content' => $content,
                 'published_at' => $publishedAt,
                 'author' => $author,
-                'tags' => $tags,
-                'categories' => $categories,
             ]
         );
+        $article->tags()->sync($tags->pluck('id'));
+        $article->categories()->attach($categories->pluck('id'));
+
+        return $article;
     }
 }
