@@ -19,7 +19,8 @@
         "spatie/laravel-data": "^4.11",
         "spatie/laravel-schemaless-attributes": "^2.5",
         "symfony/dom-crawler": "^7.2",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "^2.0",
+      "ext-dom": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
