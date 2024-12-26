@@ -91,7 +91,7 @@ class WordpressCrawlerService
             ]
         );
         $article->tags()->sync($tags->pluck('id'));
-        $article->categories()->attach($categories->pluck('id'));
+        $article->categories()->sync($categories->pluck('id'));
 
         return $article;
     }
