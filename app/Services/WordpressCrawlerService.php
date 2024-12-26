@@ -75,13 +75,17 @@ class WordpressCrawlerService
         $tags = $node->filter('span.tags-links a')
             ->each(fn ($tagNode) =>  $tagNode->text());
 
+        $categories = $node->filter('span.cat-links a')
+            ->each(fn ($tagNode) =>  $tagNode->text());
+
         return Article::updateOrCreate(
             ['source' => $source, 'title' =>  $title],
             [
                 'content' => $content,
                 'published_at' => $publishedAt,
                 'author' => $author,
-                'tags' => $tags
+                'tags' => $tags,
+                'categories' => $categories,
             ]
         );
     }

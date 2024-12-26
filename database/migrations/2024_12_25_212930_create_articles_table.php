@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->longText('content')->nullable();
             $table->json('tags')->nullable();
+            $table->json('categories')->nullable();
             $table->dateTime('published_at')->nullable();
             $table->string('author')->nullable();
             $table->timestamps();

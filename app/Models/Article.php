@@ -12,6 +12,7 @@ class Article extends Model
 
     protected $casts = [
         'tags' => 'array',
+        'categories' => 'array',
         'published_at' => 'datetime'
     ];
 }

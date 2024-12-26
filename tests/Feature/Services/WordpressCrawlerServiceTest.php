@@ -55,6 +55,9 @@ class WordpressCrawlerServiceTest extends TestCase
         $tags = collect($article->tags);
         $this->assertTrue($tags->contains(fn($tag) => $tag === 'Aphex Twin'));
         $this->assertTrue($tags->contains(fn($tag) => $tag === 'Colin Faver'));
+
+        $categories = collect($article->categories);
+        $this->assertTrue($categories->contains(fn($tag) => $tag === 'Dischi Raccontati'));
     }
 
     public function test_it_fetches_and_saves_articles_from_a_list_page()
